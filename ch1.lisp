@@ -17,3 +17,38 @@
 (last-name names)
 
 (mapcar #'+ '(1 2 3 4) '(10 20 30 40))
+
+(defparameter *titles*
+  '(Mr Mrs Miss Ms Sir Madam Dr Admiral Major General))
+
+(defun first-name (name)
+  (if (member (first name) *titles*)
+      (first-name (rest name))
+      (first name)))
+
+(mapcar #'first-name names)
+
+
+(defun mappend (fn the-list)
+  (apply #'append (mapcar fn the-list)))
+
+
+(mappend #'(lambda (l) (list l (reverse l)))
+	 '((1 2 3) (a b c)))
+
+
+;; exercises 1.1
+(defparameter *titles*
+  '(Mr Mrs Miss Ms Sir Madam Dr Admiral Major General Jr. MD))
+
+(defun before-last (the-list)
+  (reverse (rest (reverse the-list))))
+
+(defun last-name (name)
+  (if (member (first (last name)) *titles*)
+      (last-name (before-last name))
+      (first (last name))))
+
+(last-name '(Rex Morgan MD Jr.)) ; => Morgan
+
+
