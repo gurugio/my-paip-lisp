@@ -51,4 +51,35 @@
 
 (last-name '(Rex Morgan MD Jr.)) ; => Morgan
 
+;; ex 1.2
+(defun my-exp (num ex)
+  (if (> ex 0)
+      (* num (my-exp num (- ex 1)))
+      1))
+
+(my-exp 3 2)
+(my-exp 3 3)
+(my-exp 3 4)
+(my-exp 3 5) ;243
+
+
+;; ex 1.3
+(defun count-atoms (expr)
+  (if (not expr) 0 ; do not count nil
+      (if (atom expr)
+	  1
+	  (+ (count-atoms (first expr)) (count-atoms (rest expr))))))
+
+
+(count-atoms '(1 2 (3 (4 5 6) 7))) ;7
+(count-atoms '(a nil c)) ; 2
+
+
+;; ex 1.4
+(defun count-anywhere (expr another-expr)
+  (cond ((eql expr another-expr) 1)
+	((atom another-expr) 0)
+	(t (+ (count-anywhere expr (first another-expr))
+	      (count-anywhere expr (rest another-expr))))))
+
 
