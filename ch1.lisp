@@ -83,3 +83,18 @@
 	      (count-anywhere expr (rest another-expr))))))
 
 
+;; ex 1.5
+
+(defun map-product (first-seq second-seq)
+  (if (first first-seq)
+	  (append (list (* (first first-seq) (first second-seq)))
+			  (map-product (rest first-seq) (rest second-seq)))))
+(map-product '(1 2 3) '(1 2 3))
+
+(defun dot-product (first-seq second-seq)
+  (apply #'+ (map-product first-seq second-seq)))
+(dot-product '(1 2 3) '(5 6 7)) ; 38
+
+(defun dot-product2 (first-seq second-seq)
+  (apply #'+ (mapcar #'* first-seq second-seq)))
+(dot-product2 '(1 2 3) '(5 6 7)) ; 38
