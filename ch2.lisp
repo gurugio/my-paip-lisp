@@ -29,4 +29,56 @@
 	(Verb -> hit took saw liked))
   "A grammar for a trivial subset of English")
 
+(defvar *grammar* *simple-grammar*
+  "The grammar used by generate.")
+
+(assoc 'Noun *grammar*)
+
+(defun rule-lhs (rule)
+  "left-hand side of rule"
+  (first rule))
+
+(defun rule-rhs (rule)
+  (rest (rest rule)))
+
+(defun rewrites (category)
+  (rule-rhs (assoc category *grammar*)))
+
+(defun random-elt (choices)
+  (elt choices (random (length choices))))
+
+(defun mappend (fn the-list)
+  (apply #'append (mapcar fn the-list)))
+
+(defun generate (phrase)
+  "Generate a random sentence"
+  (cond ((listp phrase) (mappend #'generate phrase))
+		((rewrites phrase) (generate (random-elt (rewrites phrase))))
+		(t (list phrase))))
+
+(defun generate (phrase)
+  (if (listp phrase) (mappend #'generate phrase)
+	  (let ((choices (rewrites phrase)))
+		(if (null choices) (list phrase)
+			(generate (random-elt choices))))))
+
+
+
+;; ex 2.1
+(defun generate (phrase)
+  (let ((choices (rewrites phrase)))
+	(cond ((listp phrase) (mappend #'generate phrase))
+		  (choices (generate (random-elt choices)))
+		  (t (list phrase)))))
+		
+
+
+
+
+
+
+
+			
+
+		 
 
