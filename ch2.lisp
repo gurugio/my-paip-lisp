@@ -53,8 +53,8 @@
 (defun generate (phrase)
   "Generate a random sentence"
   (cond ((listp phrase) (mappend #'generate phrase))
-		((rewrites phrase) (generate (random-elt (rewrites phrase))))
-		(t (list phrase))))
+	((rewrites phrase) (generate (random-elt (rewrites phrase))))
+	(t (list phrase))))
 
 (defun generate (phrase)
   (if (listp phrase) (mappend #'generate phrase)
@@ -68,17 +68,20 @@
 (defun generate (phrase)
   (let ((choices (rewrites phrase)))
 	(cond ((listp phrase) (mappend #'generate phrase))
-		  (choices (generate (random-elt choices)))
-		  (t (list phrase)))))
-		
+	      (choices (generate (random-elt choices)))
+	      (t (list phrase)))))
 
 
+;; ex 2.2
+(defun term-sym (phrase)
+  (not (assoc phrase *grammar*)))
 
+(defun generate-2.2 (phrase)
+  "Generate a random sentence"
+  (cond ((listp phrase) (mappend #'generate-2.2 phrase))
+	((rewrites phrase) (generate-2.2 (random-elt (rewrites phrase))))
+	((term-sym phrase) (list phrase))))
 
-
-
-
-			
 
 		 
 
