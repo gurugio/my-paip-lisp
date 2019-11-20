@@ -78,6 +78,7 @@
 
 (defun generate-2.2 (phrase)
   "Generate a random sentence"
+
   (cond ((listp phrase) (mappend #'generate-2.2 phrase))
         ((rewrites phrase) (generate-2.2 (random-elt (rewrites phrase))))
         ((term-sym phrase) (list phrase))))
@@ -97,5 +98,31 @@
     (Noun -> man ball woman table)
     (Verb -> hit took saw liked)
     (Pronoun -> he she it these those that)))
-		 
 
+(setf *grammar* *bigger-grammar*)
+
+;; 2.6
+(defun generate (phrase)
+  "Generate a random sentence"
+  (cond ((listp phrase) (mappend #'generate phrase))
+        ((rewrites phrase) (generate (random-elt (rewrites phrase))))
+        (t (list phrase))))
+
+(defun generate-tree (phrase)
+  (cond ((listp phrase) (mapcar #'generate-tree phrase))
+        ((rewrites phrase)
+         (cons phrase (generate-tree (random-elt (rewrites phrase)))))
+        (t (list phrase))))
+
+;; ex 2.4
+(defun cross-product (x ylist)
+  (if (not ylist)
+      nil
+      (cons (list x (first ylist))
+            (cross-product x (rest ylist)))))
+
+(defun combine-all (xlist ylist)
+  (if (not xlist)
+      nil
+      (append (apply #'cross-product (first xlist) (list ylist)) ;why list?
+            (combine-all (rest xlist) ylist))))
