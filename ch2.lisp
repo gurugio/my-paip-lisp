@@ -65,22 +65,33 @@
 
 
 ;; ex 2.1
-(defun generate (phrase)
-  (let ((choices (rewrites phrase)))
-	(cond ((listp phrase) (mappend #'generate phrase))
-	      (choices (generate (random-elt choices)))
-	      (t (list phrase)))))
+;; (defun generate (phrase)
+;;   (let ((choices (rewrites phrase)))
+;; 	(cond ((listp phrase) (mappend #'generate phrase))
+;; 	      (choices (generate (random-elt choices)))
+;; 	      (t (list phrase)))))
 
+(defun generate (phrase)
+  (let ((choices nil))
+    (cond ((listp phrase) (mappend #'generate phrase))
+          ((setf choices (rewrites phrase))
+           (generate (random-elt choices)))
+          (t (list phrase)))))
 
 ;; ex 2.2
 (defun term-sym (phrase)
   (not (assoc phrase *grammar*)))
 
+;; (defun generate-2.2 (phrase)
+;;   "Generate a random sentence"
+;;   (cond ((listp phrase) (mappend #'generate-2.2 phrase))
+;;         ((rewrites phrase) (generate-2.2 (random-elt (rewrites phrase))))
+;;         ((term-sym phrase) (list phrase))))
 (defun generate-2.2 (phrase)
   "Generate a random sentence"
-
   (cond ((listp phrase) (mappend #'generate-2.2 phrase))
-        ((rewrites phrase) (generate-2.2 (random-elt (rewrites phrase))))
+        ((not (term-sym phrase))
+         (generate-2.2 (random-elt (rewrites phrase))))
         ((term-sym phrase) (list phrase))))
 
 ;; 2.5
@@ -122,7 +133,9 @@
             (cross-product x (rest ylist)))))
 
 (defun combine-all (xlist ylist)
+  (print xlist)
+  (print ylist)
   (if (not xlist)
       nil
       (append (apply #'cross-product (first xlist) (list ylist)) ;why list?
-            (combine-all (rest xlist) ylist))))
+              (combine-all (rest xlist) ylist))))
