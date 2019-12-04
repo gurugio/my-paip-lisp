@@ -67,3 +67,18 @@
       len-so-far
       (length11 (rest list) (+ len-so-far 1))))
 
+(defmacro while (test &rest body)
+  (list* 'loop
+         (list 'unless test '(return nil))
+         body))
+
+(let ((i 7))
+  (loop (unless (< i 10) (return nil))
+     (print (* i i))
+     (setf i (+ i 1 ))))
+
+(let ((i 7))
+  (while (< i 10)
+    (print (* i i))
+    (setf i (+ i 1))))
+           
