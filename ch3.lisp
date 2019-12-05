@@ -77,8 +77,39 @@
      (print (* i i))
      (setf i (+ i 1 ))))
 
+(defmacro while (test &rest body)
+  `(loop (unless ,test (return nil))
+      ,@body))
+
 (let ((i 7))
   (while (< i 10)
-    (print (* i i))
-    (setf i (+ i 1))))
-           
+    (print (* i i)) (setf i (+ i 1))))
+
+(setf test1 '(a test))
+`(this is ,test1)
+`(this is ,@test1)
+`(this is .,test1)
+
+(list 'a 'b '(c d))
+(list* 'a 'b '(c d))
+
+
+(princ 1)
+(defun ex3-3 (arg-list)
+  (if (not (null arg-list))
+      (progn
+        (princ #\()
+        (princ (car arg-list))
+        (ex3-3 (rest arg-list)))
+      (progn
+        (princ 'nil)
+        (princ #\)))))
+
+(defun ex3-4 (arg-list)
+  (if (consp arg-list)
+      (progn
+        (princ (first arg-list))
+        (ex3-4 (rest arg-list)))
+      (if (and (atom arg-list) (not (null arg-list))) ;; atom?
+          (progn (princ #\.) (princ arg-list)))))
+      
